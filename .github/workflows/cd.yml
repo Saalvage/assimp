@@ -47,7 +47,7 @@ jobs:
           filename: ${{ matrix.name }}.zip
           directory: build/bin/
 
-      - uses: Shopify/upload-to-release@v2.0.0
+      - uses: Saalvage/upload-to-release@master
         with:
           name: ${{ matrix.name }}.zip
           path: build/bin/${{ matrix.name }}.zip
