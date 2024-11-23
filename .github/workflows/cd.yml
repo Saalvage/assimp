@@ -47,7 +47,7 @@ jobs:
           filename: ${{ matrix.name }}.zip
           directory: build/bin/
 
-      - uses: Saalvage/upload-to-release@master
+      - uses: Saalvage/upload-to-release@v2.0.1
         with:
           name: ${{ matrix.name }}.zip
           path: build/bin/${{ matrix.name }}.zip
