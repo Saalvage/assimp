@@ -47,8 +47,8 @@ jobs:
           filename: ${{ matrix.name }}.zip
           directory: build/bin/
 
-      - uses: JasonEtco/upload-to-release@master
+      - uses: Shopify/upload-to-release@v1
         with:
-          args: ${{ matrix.name }}.zip
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          name: ${{ matrix.name }}.zip
+          path: ${{ matrix.name }}.zip
+          repo-token: ${{ secrets.GITHUB_TOKEN }}
