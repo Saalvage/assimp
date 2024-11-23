@@ -47,6 +47,8 @@ jobs:
           filename: ${{ matrix.name }}.zip
           directory: build/bin/
 
+      - run: ls . -R
+
       - uses: Shopify/upload-to-release@v2.0.0
         with:
           name: ${{ matrix.name }}.zip
