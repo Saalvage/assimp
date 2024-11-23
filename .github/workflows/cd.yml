@@ -50,5 +50,5 @@ jobs:
       - uses: Shopify/upload-to-release@v2.0.0
         with:
           name: ${{ matrix.name }}.zip
-          path: ${{ matrix.name }}.zip
+          path: build/${{ matrix.name }}.zip
           repo-token: ${{ secrets.GITHUB_TOKEN }}
