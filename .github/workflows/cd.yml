@@ -1,0 +1,54 @@
+name: Build and Publish Prebuilt Binaries
+
+on:
+  release:
+    types: [created]
+    
+jobs:
+  build:
+    name: ${{ matrix.name }}-build
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        name: [windows, windows-x86, macos, linux]
+        include:
+          - name: windows
+            os: windows-latest
+            arch: x64
+          - name: windows-x86
+            os: windows-latest
+            arch: x86
+          - name: macos
+            os: macos-latest
+          - name: linux
+            os: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4.2.2
+
+      - uses: hendrikmuhs/ccache-action@v1.2.13
+        with:
+          key: ${{ matrix.name }}
+      
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: ${{ matrix.arch }}
+
+      - uses: lukka/get-cmake@latest
+      
+      - name: Build
+        run: |
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          cmake --build build
+
+      - uses: TheDoctor0/zip-release@0.7.6
+        with:
+          filename: ${{ matrix.name }}.zip
+          directory: build/bin/
+
+      - uses: JasonEtco/upload-to-release@master
+        with:
+          args: ${{ matrix.name }}.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
