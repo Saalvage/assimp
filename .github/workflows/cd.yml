@@ -8,6 +8,8 @@ jobs:
   build:
     name: ${{ matrix.name }}-build
     runs-on: ${{ matrix.os }}
+    env:
+      SCCACHE_GHA_ENABLED: "true"
     strategy:
       fail-fast: false
       matrix:
@@ -27,7 +29,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: hendrikmuhs/ccache-action@v1.2.13
+      - uses: mozilla-actions/sccache-action@v0.0.6
         with:
           key: ${{ matrix.name }}
       
@@ -39,8 +41,8 @@ jobs:
       
       - name: Build
         run: |
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
-          cmake --build build --config=release
+          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+          cmake --build build --config Release
 
       - uses: TheDoctor0/zip-release@0.7.6
         with:
@@ -51,3 +53,4 @@ jobs:
         with:
           files: build/bin/${{ matrix.name }}.zip
           append_body: true
+          fail_on_unmatched_files: true
