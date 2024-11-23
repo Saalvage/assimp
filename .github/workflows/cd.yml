@@ -47,8 +47,7 @@ jobs:
           filename: ${{ matrix.name }}.zip
           directory: build/bin/
 
-      - uses: Saalvage/upload-to-release@v2.0.1
+      - uses: softprops/action-gh-release@v2
         with:
-          name: ${{ matrix.name }}.zip
-          path: build/bin/${{ matrix.name }}.zip
-          repo-token: ${{ secrets.GITHUB_TOKEN }}
+          files: build/bin/${{ matrix.name }}.zip
+          append_body: true
