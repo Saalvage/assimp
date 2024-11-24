@@ -12,32 +12,26 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - name: windows
+          - name: windows-x64
             os: windows-latest
+            arch: x64
           - name: windows-x86
             os: windows-latest
+            arch: x86
             cmake_args: -A Win32
-          - name: macos
+          - name: macos-x64
             os: macos-latest
-          - name: linux
+          - name: linux-x64
             os: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v4.2.2
 
-      - uses: hendrikmuhs/ccache-action@v1.2
-        with:
-          key: ${{ matrix.name }}
-      
-      - uses: ilammy/msvc-dev-cmd@v1
-        with:
-          arch: ${{ matrix.arch }}
-
       - uses: lukka/get-cmake@latest
       
       - name: Build
         run: |
-          cmake -B build -S . ${{ matrix.cmake_args }} -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache
+          cmake -B build -S . ${{ matrix.cmake_args }} -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF
           cmake --build build --config Release
 
       - uses: TheDoctor0/zip-release@0.7.6
