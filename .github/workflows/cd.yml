@@ -6,21 +6,19 @@ on:
     
 jobs:
   build:
-    name: ${{ matrix.name }}-build
+    name: ${{ matrix.name }}
     runs-on: ${{ matrix.os }}
     env:
       SCCACHE_GHA_ENABLED: "true"
     strategy:
       fail-fast: false
       matrix:
-        name: [windows, windows-x86, macos, linux]
         include:
           - name: windows
             os: windows-latest
-            arch: x64
           - name: windows-x86
             os: windows-latest
-            arch: x86
+            cmake_args: -A Win32
           - name: macos
             os: macos-latest
           - name: linux
@@ -41,16 +39,16 @@ jobs:
       
       - name: Build
         run: |
-          cmake -B build -S . -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
+          cmake -B build -S . ${{ matrix.cmake_args }} -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF -DCMAKE_C_COMPILER_LAUNCHER=sccache -DCMAKE_CXX_COMPILER_LAUNCHER=sccache
           cmake --build build --config Release
 
       - uses: TheDoctor0/zip-release@0.7.6
         with:
-          filename: ${{ matrix.name }}.zip
+          filename: ${{ matrix.name }}-${{ github.event.release.tag_name }}.zip
           directory: build/bin/
 
       - uses: softprops/action-gh-release@v2
         with:
-          files: build/bin/${{ matrix.name }}.zip
+          files: build/bin/${{ matrix.name }}-${{ github.event.release.tag_name }}.zip
           append_body: true
           fail_on_unmatched_files: true
