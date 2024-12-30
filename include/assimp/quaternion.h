@@ -126,8 +126,8 @@ public:
     static void Interpolate( aiQuaterniont& pOut, const aiQuaterniont& pStart,
         const aiQuaterniont& pEnd, TReal pFactor);
 
-    //! w,x,y,z components of the quaternion
-    TReal w, x, y, z;
+    //! x,y,z components of the quaternion
+    TReal x, y, z, w;
 } ;
 
 using aiQuaternion = aiQuaterniont<ai_real>;
@@ -135,7 +135,7 @@ using aiQuaternion = aiQuaterniont<ai_real>;
 #else
 
 struct aiQuaternion {
-    ai_real w, x, y, z;
+    ai_real x, y, z, w;
 };
 
 #endif
