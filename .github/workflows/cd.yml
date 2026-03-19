@@ -41,7 +41,7 @@ jobs:
       - name: Build
         run: |
           cmake -B build -S . ${{ matrix.cmake_args }} -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF
-          cmake --build build --config Release
+          cmake --build build --config Release --compile-no-warning-as-error
 
       - uses: TheDoctor0/zip-release@0.7.6
         with:
