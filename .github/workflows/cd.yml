@@ -33,8 +33,6 @@ jobs:
       - uses: actions/checkout@v6
 
       - uses: lukka/get-cmake@latest
-        with:
-          cmakeVersion: "^3.24.0"
 
       - uses: ilammy/msvc-dev-cmd@v1
         with:
@@ -42,7 +40,7 @@ jobs:
       
       - name: Build
         run: |
-          cmake -B build -S . ${{ matrix.cmake_args }} -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF --compile-no-warning-as-error
+          cmake -B build -S . ${{ matrix.cmake_args }} -DCMAKE_BUILD_TYPE=Release -DASSIMP_BUILD_TESTS=OFF -DASSIMP_WARNINGS_AS_ERRORS=OFF
           cmake --build build --config Release
 
       - uses: TheDoctor0/zip-release@0.7.6
