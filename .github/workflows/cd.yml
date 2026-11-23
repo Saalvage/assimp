@@ -18,7 +18,8 @@ jobs:
             os: windows-latest
             cmake_args: -A Win32
           - name: windows-arm64
-            os: windows-latest
+            os: windows-11-arm
+            arch: arm64
             cmake_args: -A ARM64
           - name: macos-x64
             os: macos-15-intel
@@ -30,7 +31,7 @@ jobs:
             os: ubuntu-24.04-arm
 
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: lukka/get-cmake@latest
 
